@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>LOL-simulatore</title>
+	<!-- 页面关键词 keywords -->
+	<meta name="keywords" content="云顶之弈、模拟器">
+	<!-- 页面描述内容 description -->
+	<meta name="description" content="云顶之弈棋盘模拟器">
+	<!-- 定义网页作者 author -->
+	<meta name="author" content="awei、sliwei、liwei">
+	<!--[if lte IE 9]>
+	<script>var _iealwn = {once: 0, outver: 9};</script>
+	<script id="_iealwn_js" src="https://support.dmeng.net/ie-alert-warning/latest.js"></script>
+	<![endif]-->
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<style>
+		body {
+			-moz-user-select: none;
+			user-select: none;
+			-ms-user-select: none;
+			-webkit-user-select: none;
+		}
+		.nav a {
+			color: #fff;
+		}
+
+		.show_type0, .show_type1 {
+			padding-top: 20px;
+		}
+
+		.show_type0 ul, .show_type1 ul, .show_type2 ul, .show_type3 ul {
+			margin: 0;
+			padding: 0;
+		}
+
+		.show_type0 ul:after, .show_type1 ul:after, .show_type2 ul:after, .show_type3 ul:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+
+		.show_type2 p, .show_type3 p {
+			float: left;
+			margin: 0;
+			height: 20px;
+			line-height: 20px;
+		}
+		.jiban_box {
+			margin-top: 20px;
+		}
+		.jiban_box>div {
+			float: left;
+			margin: 0 2px;
+		}
+		.jiban_box:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+
+		.pan_copy {
+			width: 690px;
+			height: 250px;
+		}
+		.pan_copy .pan_item {
+			height: 84px;
+		}
+
+		.pan_copy .pan_item:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+		.pan_copy .pan_item span:hover, .pan_copy .pan_item span:hover:after, .pan_copy .pan_item span:hover:before {
+			border-color: #FFC107;
+		}
+
+		.pan_copy .pan_item span img {
+			clip-path: polygon(51% 0%,96% 26%,96% 74%,51% 100%,5% 74%,5% 26%);
+			width: 94px;
+			margin-top: -22px;
+			margin-left: -5px;
+			position: absolute;
+			z-index: 999;
+		}
+		.pan_copy .pan_item span {
+			cursor: pointer;
+			display: inline-block;
+			margin-top: 100px;
+			width: 85px;
+			height: 50px;
+			border-left: 4px solid rgba(52, 120, 133, 0.12);
+			border-right: 4px solid rgba(52, 120, 133, 0.12);
+			line-height: 32px;
+			position: relative;
+		}
+		.pan_copy .pan_item span:after {
+			content: '';
+			position: absolute;
+			background-color: transparent;
+			width: 60px;
+			top: -33px;
+			left: 9.5px;
+			height: 60px;
+			border-top: 6px solid rgba(52, 120, 133, 0.12);
+			border-right: 6px solid rgba(52, 120, 133, 0.12);
+			transform: scaleY(.5774) rotate(-45deg);
+		}
+		.pan_copy .pan_item span:before {
+			content: '';
+			position: absolute;
+			background-color: transparent;
+			top: 17px;
+			left: 9.5px;
+			width: 60px;
+			height: 60px;
+			border-bottom: 6px solid rgba(52, 120, 133, 0.12);
+			border-left: 6px solid rgba(52, 120, 133, 0.12);
+			transform: scaleY(.5774) rotate(-45deg);
+		}
+		.pan_copy .pan_item:nth-child(2) {
+			margin-top: 0;
+		}
+		.pan_copy .pan_item:nth-child(1), .pan_copy .pan_item:nth-child(3) {
+			margin-left: -49px;
+		}
+
+		.pan_jiban {
+
+		}
+		.pan_jiban .pan_item {
+			height: 84px;
+		}
+
+		.pan_jiban .pan_item:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+
+		.pan_jiban_v1, .pan_jiban_v1:after, .pan_jiban_v1:before {
+			background-color: #ca9372!important;
+		}
+		.pan_jiban_v2, .pan_jiban_v2:after, .pan_jiban_v2:before {
+			background-color: #ffb93b!important;
+		}
+
+		.pan_jiban .pan_item span img {
+			clip-path: polygon(51% 0%,96% 26%,96% 74%,51% 100%,5% 74%,5% 26%);
+			width: 28px;
+			margin-top: -5px;
+			position: absolute;
+			z-index: 999;
+		}
+		.pan_jiban .pan_item span {
+			cursor: pointer;
+			display: block;
+			margin-top: 20px;
+			width: 28px;
+			height: 18px;
+			border-left: 1.5px solid #000;
+			border-right: 1.5px solid #000;
+			line-height: 32px;
+			position: relative;
+			background-color: #646464;
+		}
+		.pan_jiban .pan_item span:after {
+			content: '';
+			position: absolute;
+			width: 20px;
+			top: -11px;
+			left: 3px;
+			height: 20px;
+			border-top: 2px solid #000;
+			border-right: 2px solid #000;
+			transform: scaleY(.5774) rotate(-45deg);
+			background-color: #646464;
+		}
+		.pan_jiban .pan_item span:before {
+			content: '';
+			position: absolute;
+			top: 7px;
+			left: 3px;
+			width: 20px;
+			height: 20px;
+			border-bottom: 2px solid #000;
+			border-left: 2px solid #000;
+			transform: scaleY(.5774) rotate(-45deg);
+			background-color: #646464;
+		}
+
+		.pan {
+			width: 690px;
+			height: 400px;
+		}
+		.pan .pan_item {
+			height: 84px;
+		}
+
+		.pan .pan_item:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+		.pan .pan_item span:hover, .pan .pan_item span:hover:after, .pan .pan_item span:hover:before {
+			border-color: #FFC107;
+		}
+
+		.pan .pan_item_c1, .pan .pan_item_c1:after, .pan .pan_item_c1:before {
+			border-color: #808080!important;
+		}
+		.pan .pan_item_c2, .pan .pan_item_c2:after, .pan .pan_item_c2:before {
+			border-color: #11b288!important;
+		}
+		.pan .pan_item_c3, .pan .pan_item_c3:after, .pan .pan_item_c3:before {
+			border-color: #207ac7!important;
+		}
+		.pan .pan_item_c4, .pan .pan_item_c4:after, .pan .pan_item_c4:before {
+			border-color: #c440da!important;
+		}
+		.pan .pan_item_c5, .pan .pan_item_c5:after, .pan .pan_item_c5:before {
+			border-color: #ffb93b!important;
+		}
+
+		.pan .pan_item span img {
+			clip-path: polygon(51% 0%,96% 26%,96% 74%,51% 100%,5% 74%,5% 26%);
+			width: 94px;
+			margin-top: -22px;
+			margin-left: -5px;
+			position: absolute;
+			z-index: 999;
+		}
+		.pan .pan_item span {
+			cursor: pointer;
+			display: inline-block;
+			margin-right: 5px;
+			margin-top: 100px;
+			width: 85px;
+			height: 50px;
+			border-left: 4px solid #347885;
+			border-right: 4px solid #347885;
+			line-height: 32px;
+			position: relative;
+		}
+		.pan .pan_item span:after {
+			content: '';
+			position: absolute;
+			background-color: transparent;
+			width: 60px;
+			top: -33px;
+			left: 9.5px;
+			height: 60px;
+			border-top: 6px solid #347885;
+			border-right: 6px solid #347885;
+			transform: scaleY(.5774) rotate(-45deg);
+		}
+		.pan .pan_item span:before {
+			content: '';
+			position: absolute;
+			background-color: transparent;
+			top: 17px;
+			left: 9.5px;
+			width: 60px;
+			height: 60px;
+			border-bottom: 6px solid #347885;
+			border-left: 6px solid #347885;
+			transform: scaleY(.5774) rotate(-45deg);
+		}
+		.pan .pan_item:nth-child(2) {
+			margin-left: -49px;
+			margin-top: 0;
+		}
+		.pan .pan_item:nth-child(3) {
+		}
+	</style>
+</head>
+<body style="margin: 0;padding: 0;width: 100%; height: 100vh;overflow: hidden;background: url('./bg/1568621193.png') no-repeat 100% 100%">
+<div id="app" style="height: 100vh;display: flex;overflow: auto">
+
+	<div style="width: 560px;margin: 20px;padding-bottom: 100px">
+		<div class="nav">
+			<a href="javascript:;" @click="showType = 0">所有</a>
+			<a href="javascript:;" @click="showType = 1">价格</a>
+			<a href="javascript:;" @click="showType = 2">职业</a>
+			<a href="javascript:;" @click="showType = 3">种族</a>
+		</div>
+
+		<div class="show_type">
+			<div v-if="showType === 0" class="show_type0">
+				<ul>
+					<li @drag="dragHero(item)" @dragend="dragendBoard(item, 0)" v-for="(item, i) in hero" :key="i" style="cursor: pointer;float: left;width: 64px;height: 84px;list-style: none;margin: 2px;position: relative;background-color: #fff;border: 2px solid #999;" :style="getBorderColor(item)">
+						<img style="width: 64px;height: 64px;float: left" :src="item.img" alt="" :title="item.note">
+						<div style="position: absolute;height: 20px;width: 64px;top: 44px;text-align: center;color: #fff;font-size: 12px;text-shadow: -1px 0 2px #000, 0 1px 2px #000, 1px 0 2px #000, 0 -1px 2px #000;font-weight: bold">
+							{{item.name}}
+						</div>
+						<div style="width: 64px;height: 20px;float: left;">
+							<img style="float: left; width: 20px;height: 20px" v-for="(zhiyeItem, index) in item.zhiye" :src="getZhiyeImg(zhiyeItem)" alt="" :title="zhiyeItem">
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div v-if="showType === 1" class="show_type1">
+				<ul>
+					<li @drag="dragHero(item)" @dragend="dragendBoard(item, 0)" v-for="(item, i) in getHero(1)" :key="i" style="cursor: pointer;float: left;width: 64px;height: 84px;list-style: none;margin: 2px;position: relative;background-color: #fff;border: 2px solid #999;" :style="getBorderColor(item)">
+						<img style="width: 64px;height: 64px;float: left" :src="item.img" alt="" :title="item.note">
+						<div style="position: absolute;height: 20px;width: 64px;top: 44px;text-align: center;color: #fff;font-size: 12px;text-shadow: -1px 0 2px #000, 0 1px 2px #000, 1px 0 2px #000, 0 -1px 2px #000;font-weight: bold">
+							{{item.name}}
+						</div>
+						<div style="width: 64px;height: 20px;float: left;">
+							<img style="float: left; width: 20px;height: 20px" v-for="(zhiyeItem, index) in item.zhiye" :src="getZhiyeImg(zhiyeItem)" alt="" :title="zhiyeItem">
+						</div>
+					</li>
+				</ul>
+				<ul>
+					<li @drag="dragHero(item)" @dragend="dragendBoard(item, 0)" v-for="(item, i) in getHero(2)" :key="i" style="cursor: pointer;float: left;width: 64px;height: 84px;list-style: none;margin: 2px;position: relative;background-color: #fff;border: 2px solid #999;" :style="getBorderColor(item)">
+						<img style="width: 64px;height: 64px;float: left" :src="item.img" alt="" :title="item.note">
+						<div style="position: absolute;height: 20px;width: 64px;top: 44px;text-align: center;color: #fff;font-size: 12px;text-shadow: -1px 0 2px #000, 0 1px 2px #000, 1px 0 2px #000, 0 -1px 2px #000;font-weight: bold">
+							{{item.name}}
+						</div>
+						<div style="width: 64px;height: 20px;float: left;">
+							<img style="float: left; width: 20px;height: 20px" v-for="(zhiyeItem, index) in item.zhiye" :src="getZhiyeImg(zhiyeItem)" alt="" :title="zhiyeItem">
+						</div>
+					</li>
+				</ul>
+				<ul>
+					<li @drag="dragHero(item)" @dragend="dragendBoard(item, 0)" v-for="(item, i) in getHero(3)" :key="i" style="cursor: pointer;float: left;width: 64px;height: 84px;list-style: none;margin: 2px;position: relative;background-color: #fff;border: 2px solid #999;" :style="getBorderColor(item)">
+						<img style="width: 64px;height: 64px;float: left" :src="item.img" alt="" :title="item.note">
+						<div style="position: absolute;height: 20px;width: 64px;top: 44px;text-align: center;color: #fff;font-size: 12px;text-shadow: -1px 0 2px #000, 0 1px 2px #000, 1px 0 2px #000, 0 -1px 2px #000;font-weight: bold">
+							{{item.name}}
+						</div>
+						<div style="width: 64px;height: 20px;float: left;">
+							<img style="float: left; width: 20px;height: 20px" v-for="(zhiyeItem, index) in item.zhiye" :src="getZhiyeImg(zhiyeItem)" alt="" :title="zhiyeItem">
+						</div>
+					</li>
+				</ul>
+				<ul>
+					<li @drag="dragHero(item)" @dragend="dragendBoard(item, 0)" v-for="(item, i) in getHero(4)" :key="i" style="cursor: pointer;float: left;width: 64px;height: 84px;list-style: none;margin: 2px;position: relative;background-color: #fff;border: 2px solid #999;" :style="getBorderColor(item)">
+						<img style="width: 64px;height: 64px;float: left" :src="item.img" alt="" :title="item.note">
+						<div style="position: absolute;height: 20px;width: 64px;top: 44px;text-align: center;color: #fff;font-size: 12px;text-shadow: -1px 0 2px #000, 0 1px 2px #000, 1px 0 2px #000, 0 -1px 2px #000;font-weight: bold">
+							{{item.name}}
+						</div>
+						<div style="width: 64px;height: 20px;float: left;">
+							<img style="float: left; width: 20px;height: 20px" v-for="(zhiyeItem, index) in item.zhiye" :src="getZhiyeImg(zhiyeItem)" alt="" :title="zhiyeItem">
+						</div>
+					</li>
+				</ul>
+				<ul>
+					<li @drag="dragHero(item)" @dragend="dragendBoard(item, 0)" v-for="(item, i) in getHero(5)" :key="i" style="cursor: pointer;float: left;width: 64px;height: 84px;list-style: none;margin: 2px;position: relative;background-color: #fff;border: 2px solid #999;" :style="getBorderColor(item)">
+						<img style="width: 64px;height: 64px;float: left" :src="item.img" alt="" :title="item.note">
+						<div style="position: absolute;height: 20px;width: 64px;top: 44px;text-align: center;color: #fff;font-size: 12px;text-shadow: -1px 0 2px #000, 0 1px 2px #000, 1px 0 2px #000, 0 -1px 2px #000;font-weight: bold">
+							{{item.name}}
+						</div>
+						<div style="width: 64px;height: 20px;float: left;">
+							<img style="float: left; width: 20px;height: 20px" v-for="(zhiyeItem, index) in item.zhiye" :src="getZhiyeImg(zhiyeItem)" alt="" :title="zhiyeItem">
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div v-if="showType === 2" class="show_type2">
+				<div v-for="(jiBan, index) in getJiBanList(zhiye)">
+					<div class="jiban_box">
+						<div style="width: 20px;height: 20px;background-color: #fff"><img :src="jiBan.img" style="width: 20px; height: 20px" alt=""></div>
+						<p style="color: #fff">{{jiBan.name}}</p>
+					</div>
+					<ul>
+						<li @drag="dragHero(item)" @dragend="dragendBoard(item, 0)" v-for="(item, i) in getJiBan(jiBan.name)" :key="i" style="cursor: pointer;float: left;width: 64px;height: 84px;list-style: none;margin: 2px;position: relative;background-color: #fff;border: 2px solid #999;" :style="getBorderColor(item)">
+							<img style="width: 64px;height: 64px;float: left" :src="item.img" alt="" :title="item.note">
+							<div style="position: absolute;height: 20px;width: 64px;top: 44px;text-align: center;color: #fff;font-size: 12px;text-shadow: -1px 0 2px #000, 0 1px 2px #000, 1px 0 2px #000, 0 -1px 2px #000;font-weight: bold">
+								{{item.name}}
+							</div>
+							<div style="width: 64px;height: 20px;float: left;">
+								<img style="float: left; width: 20px;height: 20px" v-for="(zhiyeItem, index) in item.zhiye" :src="getZhiyeImg(zhiyeItem)" alt="" :title="zhiyeItem">
+							</div>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+
+			<div v-if="showType === 3" class="show_type3">
+				<div v-for="(jiBan, index) in getJiBanList(zhongzu)">
+					<div class="jiban_box">
+						<div style="width: 20px;height: 20px;background-color: #fff"><img :src="jiBan.img" style="width: 20px; height: 20px" alt=""></div>
+						<p style="color: #fff">{{jiBan.name}}</p>
+					</div>
+					<ul>
+						<li @drag="dragHero(item)" @dragend="dragendBoard(item, 0)" v-for="(item, i) in getJiBan(jiBan.name)" :key="i" style="cursor: pointer;float: left;width: 64px;height: 84px;list-style: none;margin: 2px;position: relative;background-color: #fff;border: 2px solid #999;" :style="getBorderColor(item)">
+							<img style="width: 64px;height: 64px;float: left" :src="item.img" alt="" :title="item.note">
+							<div style="position: absolute;height: 20px;width: 64px;top: 44px;text-align: center;color: #fff;font-size: 12px;text-shadow: -1px 0 2px #000, 0 1px 2px #000, 1px 0 2px #000, 0 -1px 2px #000;font-weight: bold">
+								{{item.name}}
+							</div>
+							<div style="width: 64px;height: 20px;float: left;">
+								<img style="float: left; width: 20px;height: 20px" v-for="(zhiyeItem, index) in item.zhiye" :src="getZhiyeImg(zhiyeItem)" alt="" :title="zhiyeItem">
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div style="flex: 1">
+
+		<div style="width: 150px;float: left">
+			<div class="pan_jiban">
+				<div class="pan_item">
+					<span v-for="(item, i) in jiban" :class="getJiBanClass(item, 1)" v-if="getJiBanClass(item, 3)">
+						<img v-if="item.img" :src="item.img" alt="">
+						<div style="position: absolute;left: 35px;color: #fff;top: -7px;width: 120px;">{{item.name}} {{getJiBanClass(item, 0)}}</div>
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<div style="float:left;">
+			<div class="pan_copy">
+				<div class="pan_item">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+				<div class="pan_item">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+				<div class="pan_item">
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+			</div>
+
+			<div class="pan">
+				<div v-for="(item, i) in checkerboard" :key="i" class="pan_item">
+				<span :class="borderColor(heroItem)" v-for="(heroItem, index) in item" :key="index" @dragenter="dragenterBoard(heroItem, i, index)" @drag="dragHero(heroItem, i, index)" @dragend="dragendBoard(heroItem, 1)" @dragleave="endLeave">
+					<img v-if="heroItem.img" :src="heroItem.img" alt="">
+				</span>
+				</div>
+			</div>
+
+			<div style="text-align: center;line-height: 80px;color: #fff;width: 739px;height: 80px;border: 1px solid rgba(52, 120, 133, 0.2);background-color: rgba(52, 120, 133, 0.12);margin-left: -49px" @dragenter="delEnter" @dragleave="delLeave">
+				拖到此处删除
+			</div>
+
+			<div style="margin-top: 20px;text-align: center;line-height: 80px;color: #fff;width: 739px;height: 80px;border: 1px solid rgba(52, 120, 133, 0.2);background-color: rgba(52, 120, 133, 0.12);margin-left: -49px">
+				装备待添加...
+			</div>
+		</div>
+
+	</div>
+
+
+
+</div>
+<div style="color: #fff;position: fixed;width: 100%;bottom: 20px;text-align: center">
+	<a style="color: #ffb93b" href="https://github.com/sliwei/LOL-simulatore">© sliwei</a> update 2019.09.17
+</div>
+</body>
+</html>
+
+<script>
+
+	var app = new Vue({
+		el: '#app',
+		data: {
+			showType: 0,
+			color: [
+				'#808080',
+				'#11b288',
+				'#207ac7',
+				'#c440da',
+				'#ffb93b',
+			],
+			checkerboard: [
+				[
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+				],[
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+				],[
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+					{},
+				]
+			],
+			initEnter: {},
+			enter: {},
+			jibanList: [],
+			delSta: false,
+			leaveSta: false,
+			hero: [
+				{name: '莫德凯撒', note: '铁凯冥魂', price: 1, zhiye: ['暗影', '骑士'], img: './img/1568621197.png'},
+				{name: '德莱厄斯', note: '诺克萨斯之手', price: 1, zhiye: ['帝国', '骑士'], img: './img/1568621199.png'},
+				{name: '盖伦', note: '德玛西亚之力', price: 1, zhiye: ['贵族', '骑士'], img: './img/1568621200.png'},
+				{name: '薇恩', note: '暗夜猎手', price: 1, zhiye: ['贵族', '游侠'], img: './img/1568621201.png'},
+				{name: '菲奥娜', note: '无双剑姬', price: 1, zhiye: ['贵族', '剑士'], img: './img/1568621202.png'},
+				{name: '卡密尔', note: '青钢影', price: 1, zhiye: ['海克斯科技', '剑士'], img: './img/1568621203.png'},
+				{name: '格雷福斯', note: '法外狂徒', price: 1, zhiye: ['海盗', '枪手'], img: './img/1568621204.png'},
+				{name: '崔丝塔娜', note: '麦林炮手', price: 1, zhiye: ['约德尔人', '枪手'], img: './img/1568621205.png'},
+				{name: '卡萨丁', note: '虚空行者', price: 1, zhiye: ['虚空', '法师'], img: './img/1568621206.png'},
+				{name: '卡兹克', note: '虚空掠夺者', price: 1, zhiye: ['虚空', '刺客'], img: './img/1568621207.png'},
+				{name: '沃里克', note: '祖安怒兽', price: 1, zhiye: ['狂野', '斗士'], img: './img/1568621208.png'},
+				{name: '奈德里', note: '狂野女猎手', price: 1, zhiye: ['狂野', '换形师'], img: './img/1568621209.png'},
+				{name: '伊利丝', note: '蜘蛛女皇', price: 1, zhiye: ['恶魔', '换形师'], img: './img/1568621210.png'},
+				{name: '慎', note: '暮光之眼', price: 2, zhiye: ['忍者', '剑士'], img: './img/1568621212.png'},
+				{name: '劫', note: '影流之主', price: 2, zhiye: ['忍者', '刺客'], img: './img/1568621213.png'},
+				{name: '派克', note: '血港鬼影', price: 2, zhiye: ['海盗', '刺客'], img: './img/1568621214.png'},
+				{name: '崔斯特', note: '卡牌大师', price: 2, zhiye: ['海盗', '法师'], img: './img/1568621215.png'},
+				{name: '阿狸', note: '九尾妖狐', price: 2, zhiye: ['狂野', '法师'], img: './img/1568621216.png'},
+				{name: '露露', note: '仙灵女巫', price: 2, zhiye: ['约德尔人', '法师'], img: './img/1568621217.png'},
+				{name: '布里兹', note: '蒸汽机器人', price: 2, zhiye: ['机器人', '斗士'], img: './img/1568621218.png'},
+				{name: '雷克塞', note: '虚空遁地兽', price: 2, zhiye: ['虚空', '斗士'], img: './img/1568621219.png'},
+				{name: '布隆', note: '弗雷尔卓德之心', price: 2, zhiye: ['极地', '护卫'], img: './img/1568621220.png'},
+				{name: '丽桑卓', note: '冰霜女巫', price: 2, zhiye: ['极地', '元素使'], img: './img/1568621221.png'},
+				{name: '卢锡安', note: '圣枪游侠', price: 2, zhiye: ['贵族', '枪手'], img: './img/1568621222.png'},
+				{name: '韦鲁斯', note: '惩戒之箭', price: 2, zhiye: ['恶魔', '游侠'], img: './img/1568621223.png'},
+				{name: '杰斯', note: '未来守护者', price: 2, zhiye: ['海克斯科技', '换形师'], img: './img/1568621224.png'},
+				{name: '亚托克斯', note: '暗裔剑魔', price: 3, zhiye: ['恶魔', '剑士'], img: './img/1568621226.png'},
+				{name: '莫甘娜', note: '堕落天使', price: 3, zhiye: ['恶魔', '法师'], img: './img/1568621227.png'},
+				{name: '维嘉', note: '邪恶小法师', price: 3, zhiye: ['约德尔人', '法师'], img: './img/1568621228.png'},
+				{name: '凯南', note: '狂暴之心', price: 3, zhiye: ['忍者', '约德尔人', '元素使'], img: './img/1568621229.png'},
+				{name: '波比', note: '圣锤之毅', price: 3, zhiye: ['约德尔人', '骑士'], img: './img/1568621230.png'},
+				{name: '伊芙琳', note: '痛苦之拥', price: 3, zhiye: ['恶魔', '刺客'], img: './img/1568621231.png'},
+				{name: '卡特琳娜', note: '不祥之刃', price: 3, zhiye: ['帝国', '刺客'], img: './img/1568621232.png'},
+				{name: '雷恩加尔', note: '傲之追猎者', price: 3, zhiye: ['狂野', '刺客'], img: './img/1568621233.png'},
+				{name: '艾希', note: '寒冰射手', price: 3, zhiye: ['极地', '游侠'], img: './img/1568621234.png'},
+				{name: '沃利贝尔', note: '雷霆咆哮', price: 3, zhiye: ['极地', '斗士'], img: './img/1568621235.png'},
+				{name: '蔚', note: '皮城执法官', price: 3, zhiye: ['海克斯科技', '斗士'], img: './img/1568621236.png'},
+				{name: '普朗克', note: '海洋之灾', price: 3, zhiye: ['海盗', '枪手', '剑士'], img: './img/1568621237.png'},
+				{name: '希瓦娜', note: '龙血武姬', price: 3, zhiye: ['龙', '换形师'], img: './img/1568621238.png'},
+				{name: '阿卡丽', note: '离群之刺', price: 4, zhiye: ['忍者', '刺客'], img: './img/1568621240.png'},
+				{name: '奥瑞利安索尔', note: '铸星龙王', price: 4, zhiye: ['龙', '法师'], img: './img/1568621241.png'},
+				{name: '布兰德', note: '复仇焰魂', price: 4, zhiye: ['恶魔', '元素使'], img: './img/1568621242.png'},
+				{name: '科加斯', note: '虚空恐惧', price: 4, zhiye: ['虚空', '斗士'], img: './img/1568621243.png'},
+				{name: '德莱文', note: '荣耀行刑官', price: 4, zhiye: ['帝国', '剑士'], img: './img/1568621244.png'},
+				{name: '纳尔', note: '迷失之牙', price: 4, zhiye: ['约德尔人', '狂野', '换形师'], img: './img/1568621245.png'},
+				{name: '千珏', note: '永猎双子', price: 4, zhiye: ['暗影', '游侠'], img: './img/1568621246.png'},
+				{name: '蕾欧娜', note: '曙光女神', price: 4, zhiye: ['贵族', '护卫'], img: './img/1568621247.png'},
+				{name: '瑟庄妮', note: '北地之怒', price: 4, zhiye: ['极地', '骑士'], img: './img/1568621248.png'},
+				{name: '金克斯', note: '暴走萝莉', price: 4, zhiye: ['海克斯科技', '枪手'], img: './img/1568621249.png'},
+				{name: '亚索', note: '疾风剑豪', price: 5, zhiye: ['浪人', '剑士'], img: './img/1568621251.png'},
+				{name: '艾维尼亚', note: '冰晶凤凰', price: 5, zhiye: ['极地', '元素使'], img: './img/1568621252.png'},
+				{name: '卡尔萨斯', note: '死亡颂唱者', price: 5, zhiye: ['暗影', '法师'], img: './img/1568621253.png'},
+				{name: '凯尔', note: '正义天使', price: 5, zhiye: ['贵族', '骑士'], img: './img/1568621254.png'},
+				{name: '厄运小姐', note: '赏金猎人', price: 5, zhiye: ['海盗', '枪手'], img: './img/1568621255.png'},
+				{name: '斯维因', note: '诺克萨斯统领', price: 5, zhiye: ['帝国', '恶魔', '换形师'], img: './img/1568621256.png'},
+				{name: '潘森', note: '不屈之枪', price: 5, zhiye: ['龙', '护卫'], img: './img/1568621257.png'},
+				{name: '卡莎', note: '虚空之女', price: 5, zhiye: ['虚空', '刺客', '游侠'], img: './img/1568621258.png'},
+			],
+			zhongzu: '/浪人/机器人/极地/恶魔/帝国/狂野/忍者/龙/海克斯科技/暗影/海盗/约德尔人/贵族/虚空',
+			zhiye: '/剑士/斗士/枪手/法师/元素使/护卫/骑士/游侠/换形师/刺客',
+			jiban: [ // 0:种族,2:职业
+				{name: '浪人', num: [1], type: 0, img: './img3/1568621823.png',},
+				{name: '机器人', num: [1], type: 0, img: './img3/1568621824.png',},
+				{name: '剑士', num: [3, 6, 9], type: 1, img: './img3/1568621825.png',},
+				{name: '极地', num: [2, 4, 6], type: 0, img: './img3/1568621826.png',},
+				{name: '斗士', num: [2, 4, 6], type: 1, img: './img3/1568621827.png',},
+				{name: '恶魔', num: [2, 4, 6], type: 0, img: './img3/1568621828.png',},
+				{name: '枪手', num: [2, 4, 6], type: 1, img: './img3/1568621829.png',},
+				{name: '帝国', num: [2, 4], type: 0, img: './img3/1568621830.png',},
+				{name: '狂野', num: [2, 4], type: 0, img: './img3/1568621831.png',},
+				{name: '法师', num: [3, 6], type: 1, img: './img3/1568621832.png',},
+				{name: '忍者', num: [1, 4], type: 0, img: './img3/1568621833.png',},
+				{name: '龙', num: [2], type: 0, img: './img3/1568621834.png',},
+				{name: '元素使', num: [3], type: 1, img: './img3/1568621835.png',},
+				{name: '护卫', num: [2], type: 1, img: './img3/1568621836.png',},
+				{name: '海克斯科技', num: [2, 4], type: 0, img: './img3/1568621837.png',},
+				{name: '骑士', num: [2, 4, 6], type: 1, img: './img3/1568621838.png',},
+				{name: '暗影', num: [2], type: 0, img: './img3/1568621839.png',},
+				{name: '海盗', num: [3], type: 0, img: './img3/1568621840.png',},
+				{name: '游侠', num: [2, 4], type: 1, img: './img3/1568621841.png',},
+				{name: '换形师', num: [3, 6], type: 1, img: './img3/1568621842.png',},
+				{name: '约德尔人', num: [3, 6, 9], type: 0, img: './img3/1568621843.png',},
+				{name: '刺客', num: [3, 6, 9], type: 1, img: './img3/1568621844.png',},
+				{name: '贵族', num: [3, 6], type: 0, img: './img3/1568621845.png',},
+				{name: '虚空', num: [3], type: 0, img: './img3/1568621846.png',},
+			],
+		},
+		methods: {
+			getZhiyeImg(name) {
+				let jiban = this.jiban;
+				let img = '';
+				jiban.map(item => {
+					if (item.name === name) {
+						img = item.img;
+					}
+				});
+				return img;
+			},
+			getBorderColor(dat) {
+				let index = dat.price - 1;
+				let color = this.color;
+				return `border-color: ${color[index]}`;
+			},
+			getHero(price) {
+				let hero = this.hero;
+				let heroList = [];
+				hero.map(item => {
+					if (item.price === price) {
+						heroList.push(item)
+					}
+				});
+				return heroList;
+			},
+			getJiBanList(zhiye) {
+				let jiBanList = [];
+				let jiban = this.jiban;
+				jiban.map(item => {
+					if (zhiye.indexOf(item.name) >= 0) {
+						jiBanList.push(item)
+					}
+				});
+				return jiBanList;
+			},
+			getJiBan(jiban) {
+				let hero = this.hero;
+				let heroList = [];
+				hero.map(item => {
+					if (item.zhiye.indexOf(jiban) >= 0) {
+						heroList.push(item)
+					}
+				});
+				return heroList;
+			},
+			dragHero(hero, i, index) {
+				this.initEnter = {
+					board: hero,
+					i: i,
+					index: index,
+				};
+			},
+			dragenterBoard(board, i, index) {
+				this.leaveSta = true;
+				this.enter = {
+					board: board,
+					i: i,
+					index: index,
+				};
+			},
+			dragendBoard(hero, tp) {
+				console.log(hero);
+				let initEnter = this.initEnter;
+				let enter = this.enter;
+				let checkerboard = this.checkerboard;
+				console.log('aa');
+				// TODO:xx
+				// if (!this.leaveSta) {
+				// 	return false;
+				// }
+				if (tp && this.delSta) {
+					checkerboard[initEnter.i][initEnter.index] = {};
+					this.checkerboard = {...checkerboard};
+					this.delSta = false;
+					return false;
+				}
+				if (tp) {
+					let endHero = JSON.parse(JSON.stringify(checkerboard[enter.i][enter.index]));
+					checkerboard[enter.i][enter.index] = hero;
+					checkerboard[initEnter.i][initEnter.index] = endHero;
+					this.checkerboard = {...checkerboard};
+					return false;
+				}
+				// if (enter.board && enter.board.img) {
+				// 	return false;
+				// };
+				checkerboard[enter.i][enter.index] = hero;
+				this.checkerboard = {...checkerboard};
+			},
+			delEnter() {
+				this.delSta = true;
+			},
+			delLeave() {
+				let _this = this;
+				setTimeout(() => {
+					_this.delSta = false;
+				}, 100);
+			},
+			endLeave() {
+				let _this = this;
+				setTimeout(() => {
+					_this.leaveSta = false;
+				}, 100);
+			},
+			borderColor(hero) {
+				return `pan_item_c${hero.price}`
+			},
+			getJiBanClass(jibanItem, tp) {
+				console.log(jibanItem);
+				let name = jibanItem.name;
+				let num = jibanItem.num;
+				let haveNum = 0;
+				let jibanList = this.jibanList;
+				jibanList.map(item => {
+					if (item === name) {
+						haveNum++;
+					}
+				})
+				if (tp === 1) {
+					return haveNum >= num[num.length-1] ? 'pan_jiban_v2' : haveNum >= num[0] ? 'pan_jiban_v1' : ''
+				} else if(tp === 0) {
+					return `${haveNum}/${num[num.length-1]}`
+				} else {
+					return haveNum;
+				}
+			},
+		},
+		created() {
+		},
+		watch: {
+			'checkerboard'(newBoard, oldBoard) {
+				let list = [...newBoard[0], ...newBoard[1], ...newBoard[2]];
+				let clearListName = [];
+				let jibanList = [];
+				list.map(item => {
+					if (item.img && clearListName.indexOf(item.name) === -1) {
+						clearListName.push(item.name);
+						jibanList = [...jibanList, ...item.zhiye];
+					}
+				});
+
+				this.jibanList = [...jibanList];
+			}
+		},
+	})
+</script>
